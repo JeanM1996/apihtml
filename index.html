@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	 <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>Covid API</title>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+</head>
+<style >
+	.header{
+		background-color: white;
+		padding :10px;
+		margin-bottom: 100px
+	}
+	footer{
+		background-color: white;
+		padding: 20px;
+	}
+	body{
+		background-image: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+	}
+</style>
+<body>
+<div class="header">
+<h1 class="text-center" >Monitor Citas Medicas App</h1> 
+	
+</div>
+
+<div class="container">
+	<table id="covidtable" class="table table-bordered ">
+		<thead>
+			<tr>
+				<th>Ip</th>
+				<th>Fecha</th><th>Dispositivo</th><th>Motivo</th>
+			</tr>
+		</thead>
+		<tbody id="tablebody">
+		
+		</tbody>
+		
+	</table>
+	
+</div>
+<footer class="text-center">
+	<p>Citas Medicas Monitor</p>
+</footer>
+
+</body>
+</html>
+<script>
+	var visitas=[]
+	$.ajax({
+		type:'get',
+		url:"https://webapicitamedicaunl.azurewebsites.net/Audit/GetAll",
+		dataType:"json",
+		success:function(response){
+			visitas=response.visitas
+			updatetable(visitas);
+		}
+
+	});
+	updatetable=(visitas)=>
+	{
+		for(visita of visitas)
+		{
+			let newrow="<tr><td>"+visita.ip+"</td><td>"+visita.fechaHora+"</td><td>"+visita.dispositivo+"</td><td>"+visita.tipo+"</td></tr>"
+			$("#tablebody").append(newrow)
+		}
+		$("#covidtable").DataTable();
+	}
+
+</script>
+
